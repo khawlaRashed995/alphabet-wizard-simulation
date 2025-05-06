@@ -3,20 +3,29 @@ import streamlit as st
 import random
 import string
 
-st.set_page_config(page_title="AI Simulation - Alphabet Wizard", page_icon="🔤")
-st.title("📘 محاكاة الذكاء الاصطناعي - Alphabet Wizard Smart Book")
+# إعداد الصفحة
+st.set_page_config(page_title="Alphabet AI Simulation", page_icon="🔤")
+st.title("📘 Alphabet Wizard Smart Book - AI Simulation")
+st.write("🧠 هذه محاكاة تفاعلية لتدريب الطفل على نطق الحروف باستخدام الذكاء الاصطناعي.")
 
-st.write("🧠 هذا النموذج يحاكي طريقة تفاعل الذكاء الاصطناعي مع نطق الحروف من قبل الطفل.")
+# توليد الحرف فقط مرة واحدة في بداية الجلسة
+if 'target' not in st.session_state:
+    st.session_state.target = random.choice(string.ascii_uppercase)
 
-letters = list(string.ascii_uppercase)  # A to Z
-target = random.choice(letters)
+# عرض الحرف
+st.markdown(f"### 🔤 نطق الحرف المطلوب: **{st.session_state.target}**")
 
-st.markdown(f"### 🔤 نرجو من الطفل نطق الحرف التالي: **{target}**")
+# إدخال المستخدم
+user_input = st.text_input("📣 أدخل الحرف الذي نطقته:")
 
-user_input = st.text_input("📣 أدخل الحرف الذي نطقته (للمحاكاة):")
-
+# التحقق من الإجابة
 if user_input:
-    if user_input.strip().upper() == target:
-        st.success("✅ أحسنت! نطق صحيح.")
+    if user_input.strip().upper() == st.session_state.target:
+        st.success("✅ صحيح! أحسنت!")
     else:
-        st.error("❌ حاول مرة أخرى.")
+        st.error("❌ غير صحيح. حاول مرة أخرى.")
+
+# زر لإعادة توليد حرف جديد
+if st.button("🔄 توليد حرف جديد"):
+    st.session_state.target = random.choice(string.ascii_uppercase)
+    st.experimental_rerun()
